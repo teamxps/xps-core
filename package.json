@@ -1,6 +1,8 @@
 {
   "name": "@teamxps/xps",
+  "description": "Build and distribute reusuable exposed modules",
   "version": "0.0.0",
+  "scope": "teamxps",
   "author": "Christian Wang @Squishy123",
   "bin": {
     "xps": "./bin/run"

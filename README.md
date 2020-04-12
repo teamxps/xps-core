@@ -1,4 +1,5 @@
 @teamxps/xps
+Build and distribute reusuable exposed modules
 ============
 
 
