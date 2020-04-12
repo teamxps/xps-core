@@ -1,7 +1,9 @@
-@teamxps/xps
-Build and distribute reusuable exposed modules
-============
+# @teamxps/xps
+### Build and distribute reusuable exposed modules
 
+## Thinking of Contributing?
+### Read the [contributions guide](docs/CONTRIBUTIONS.md) first!
+============
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
