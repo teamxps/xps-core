@@ -12,10 +12,9 @@ export async function lookup(objpath: string, startDir: string = process.cwd(), 
       return
 
     pathExists = await fs.pathExists(path.resolve(currentPath, objpath))
-    currentPath = path.resolve(currentPath, '../')
-
     if (pathExists)
       return path.resolve(currentPath, objpath)
+    currentPath = path.resolve(currentPath, '../')
   }
 }
 
