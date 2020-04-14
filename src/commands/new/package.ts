@@ -4,6 +4,7 @@ import {projectExists} from '../../helpers/project/validation'
 import * as low from 'lowdb'
 import * as FileAsync from 'lowdb/adapters/FileAsync'
 import * as path from 'path'
+import * as fs from 'fs-extra'
 import {initDatabase} from '../../helpers/project/setup'
 
 interface PackageXPSJson {
@@ -32,11 +33,8 @@ export default class NewPackage extends Command {
       this.error('could not find an .xps project in this or any parent folders')
     }
 
-    const xpsjson = path.resolve(projExists, 'xps.json')
-    console.log(xpsjson)
-
     // get projDB
-    const projDB = await low(new FileAsync(xpsjson))
+    const projDB = await low(new FileAsync(path.resolve(projExists, 'xps.json')))
 
     // interactive prompt
     const response: PackageXPSJson = await prompt([
@@ -65,23 +63,24 @@ export default class NewPackage extends Command {
       },
     ])
 
-    // create new packageDB
-    const packageDB = await low(new FileAsync(`${response.name}.xps.json`))
-
-    // defaults
-    await packageDB.defaults({
-      name: response.name,
-      description: response.description,
-      entry: response.entry,
-      version: '0.0.0',
-    }).write()
-
     // init xps pkg DB
     await initDatabase(projExists, response.name)
 
+    // check if entry exists
+    const entryExists = await fs.pathExists(response.entry)
+    // if not create it
+    if (!entryExists) {
+      await fs.ensureFile(response.entry)
+    }
+
     // write component into projDB
-    await projDB.set(`components.${response.name}`, {location: process.cwd()}).write()
-    const state = await projDB.getState()
-    console.log(state)
+    await projDB.set(`components.${response.name}`,
+      {
+        name: response.name,
+        description: response.description,
+        version: '0.0.0',
+        entry: path.relative(projExists, response.entry),
+      }).write()
+    this.log('successfully created new xps module')
   }
 }
