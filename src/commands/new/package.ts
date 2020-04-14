@@ -14,7 +14,7 @@ interface PackageXPSJson {
 }
 
 export default class NewPackage extends Command {
-  static description = 'describe the command here'
+  static description = 'Create a new xps pkg tracker'
 
   static aliases = ['new:pkg', 'new:mod', 'new:module']
 
@@ -42,7 +42,7 @@ export default class NewPackage extends Command {
         type: 'input',
         name: 'name',
         message: 'What is the module name?',
-        validate: async value => { // check so name is unique
+        validate: async function (value) { // check so name is unique
           const val = await projDB.find(`components.${value}`).value()
           if (val) {
             return 'module name not unique'
