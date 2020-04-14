@@ -11,11 +11,6 @@ interface XPSProjectOpts{
     projectDir?: string; // the location of .xps folder
 }
 
-interface XPSProjectInterface {
-    projectLocation: string;
-    xpsDBRef?: low.lowdb;
-}
-
 interface XPSPackageOptions {
   name: string;
   description?: string;
