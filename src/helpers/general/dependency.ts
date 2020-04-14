@@ -25,7 +25,7 @@ export async function getDependencies(entry: string) {
   entry = path.resolve(entry)
   const fileContent = await (await fs.readFile(entry)).toString()
   const npmDependencies: string[] = []
-  const dependencies = {}// flattened list of dependencies
+  const dependencies: any = {}// flattened list of dependencies
   const visited = [entry] // keep track of visited paths
   const stack: string[] = [] // keep track of srcs to visit
   fileContent.match(IMPORT_PRESENT)?.forEach(p => {
@@ -46,7 +46,7 @@ export async function getDependencies(entry: string) {
         continue
 
       // check if file exists
-      const fileExists: string = await Promise.any([
+      const fileExists: any = await Promise.any([
         pathExists(poppedEntry),
         ...SUPPORTED_EXTENSIONS.map(ext => pathExists(poppedEntry + ext)),
       ])
@@ -70,6 +70,7 @@ export async function getDependencies(entry: string) {
         })
     } catch (err) {
       if (!(err instanceof AggregateError))
+        // eslint-disable-next-line no-console
         console.error(err)
     }
   }

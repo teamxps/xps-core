@@ -15,7 +15,7 @@ export default class MetaDependency extends Command {
   async run() {
     const {args, flags} = this.parse(MetaDependency)
 
-    const dependencies = await getDependencies(args.file)
+    const dependencies = await getDependencies(args.file).then(d => JSON.stringify(d))
     this.log(dependencies)
   }
 }

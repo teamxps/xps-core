@@ -64,8 +64,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`xps help [COMMAND]`](#xps-help-command)
-* [`xps meta:dependencies [FILE]`](#xps-metadependencies-file)
-* [`xps meta:dependency [FILE]`](#xps-metadependency-file)
+* [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)
 * [`xps new:project [DIRNAME]`](#xps-newproject-dirname)
 
@@ -86,34 +85,19 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
 
-## `xps meta:dependencies [FILE]`
+## `xps meta:dependency FILE`
 
 describe the command here
 
 ```
 USAGE
-  $ xps meta:dependencies [FILE]
+  $ xps meta:dependency FILE
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
+  -h, --help  show CLI help
 
-_See code: [src\commands\meta\dependencies.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\dependencies.ts)_
-
-## `xps meta:dependency [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ xps meta:dependency [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+ALIASES
+  $ xps meta:dep
 ```
 
 _See code: [src\commands\meta\dependency.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\dependency.ts)_

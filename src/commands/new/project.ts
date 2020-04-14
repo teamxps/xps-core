@@ -1,10 +1,5 @@
 import {Command, flags} from '@oclif/command'
 import XPSProject from '../../helpers/project/adapter'
-import {projectExists} from '../../helpers/project/validation'
-import {initJSON} from '../../helpers/project/setup'
-import * as path from 'path'
-import {XPS_PROJECT_DIR} from '../../helpers/project/constants'
-
 export default class NewProject extends Command {
   static description = 'Create a new xps project'
 

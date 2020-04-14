@@ -1,11 +1,5 @@
 import {Command, flags} from '@oclif/command'
 import {prompt} from 'enquirer'
-import {projectExists} from '../../helpers/project/validation'
-import * as low from 'lowdb'
-import * as FileAsync from 'lowdb/adapters/FileAsync'
-import * as path from 'path'
-import * as fs from 'fs-extra'
-import {initDatabase} from '../../helpers/project/setup'
 import XPSProject from '../../helpers/project/adapter'
 
 interface PackageXPSJson {
