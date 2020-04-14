@@ -41,7 +41,7 @@ export default class NewPackage extends Command {
         name: 'name',
         message: 'What is the module name?',
         validate: async function (value): Promise<any> { // check so name is unique
-          const val = await project.getDB().find(`components.${value}`).value()
+          const val = await project.getDB().get('components').get(value).value()
           if (val) {
             return 'module name not unique'
           }
