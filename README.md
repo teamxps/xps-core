@@ -47,30 +47,9 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`xps hello [FILE]`](#xps-hello-file)
 * [`xps help [COMMAND]`](#xps-help-command)
 * [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)
 * [`xps new:project [DIRNAME]`](#xps-newproject-dirname)
-
-## `xps hello [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ xps hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ xps hello
-  hello world from ./src/hello.ts!
-```
-
-_See code: [src\commands\hello.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\hello.ts)_
 
 ## `xps help [COMMAND]`
 
@@ -91,7 +70,7 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3
 
 ## `xps new:package [DIRNAME]`
 
-describe the command here
+Create a new xps pkg tracker
 
 ```
 USAGE
@@ -110,7 +89,7 @@ _See code: [src\commands\new\package.ts](https://github.com/teamxps/xps/blob/v0.
 
 ## `xps new:project [DIRNAME]`
 
-describe the command here
+Create a new xps project
 
 ```
 USAGE
