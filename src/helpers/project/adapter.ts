@@ -1,4 +1,5 @@
 import {projectExists} from './validation'
+import {initDatabase} from './setup'
 import * as low from 'lowdb'
 import * as FileAsync from 'lowdb/adapters/FileAsync'
 import * as path from 'path'
@@ -84,6 +85,9 @@ export default class XPSProject {
 
       // write component into projDB
       await this.getDB().set(`components.${pkgOptions.name}`, obj).write()
+
+      // create database dirs
+      await initDatabase(this.projectLocation, pkgOptions.name)
 
       return obj
     }
