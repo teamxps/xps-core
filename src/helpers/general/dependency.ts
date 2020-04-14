@@ -73,5 +73,5 @@ export async function getDependencies(entry: string) {
         console.error(err)
     }
   }
-  return {npmDependencies: npmDependencies, dependencies: dependencies}
+  return {npmDependencies: npmDependencies, fileDependencies: dependencies}
 }
