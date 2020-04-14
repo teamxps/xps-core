@@ -7,9 +7,7 @@ import * as FileAsync from 'lowdb/adapters/FileAsync'
 // setup package .xps database folders with a prefix - assume setupDir is the xps folder at proj root
 export async function initDatabase(setupDir: string = path.resolve(process.cwd(), Constants.XPS_PROJECT_DIR), prefix = 'temp') {
   const projectDir = path.resolve(setupDir, prefix)
-  console.log(projectDir)
   const objectsDir = path.resolve(projectDir, Constants.XPS_OBJECTS_DIR)
-  console.log(objectsDir)
   await fs.ensureDir(projectDir) // .xps/prefix dir
   await fs.ensureDir(objectsDir) // .xps/prefix/objects dir
   Constants.XPS_DATABASES.forEach(async dbname => { // .xps/prefix/objects/$databaseName dir

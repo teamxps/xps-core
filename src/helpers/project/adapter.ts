@@ -15,17 +15,23 @@ interface XPSProjectInterface {
     xpsDBRef?: low.lowdb;
 }
 
+interface XPSPackageOptions {
+  name: string;
+  description?: string;
+  entry: string;
+}
+
 class XPSProjectError extends Error {}
 
 export default class XPSProject {
     projectLocation = ''; // location of .xps folder
 
-    xpsDBRef: any; // ref to db
+    private xpsDBRef: any; // ref to db
 
     isInit = false; // track whether or not adapter is init
 
     // init the adapter
-    async init(opts: XPSProjectOpts) {
+    async init(opts: XPSProjectOpts = {}) {
       this.projectLocation = (opts.projectDir) ? opts.projectDir : await projectExists()
       if (!this.projectLocation) {
         throw new XPSProjectError('could not find an .xps project in this or any parent folders')
@@ -44,10 +50,41 @@ export default class XPSProject {
       await initJSON(path.resolve(setupDir, Constants.XPS_PROJECT_DIR))
     }
 
-    // return ref to local xps.json db
-    async getXPSDB() {
+    // safe way to return ref to local xps.json db
+    getDB() {
       if (!this.isInit)
         throw new XPSProjectError('xps project adapter not initialized')
       return this.xpsDBRef
+    }
+
+    // add a new package to this project
+    async addPkg(pkgOptions: XPSPackageOptions) {
+      if (!this.isInit)
+        throw new XPSProjectError('xps project adapter not initialized')
+
+      // check for unique name
+      const nameExists = await this.getDB().find(`components.${pkgOptions.name}`).value()
+      if (nameExists) {
+        throw new XPSProjectError('package name is not unique')
+      }
+
+      // check if entry exists
+      const entryExists = await fs.pathExists(pkgOptions.entry)
+      // if not create it
+      if (!entryExists) {
+        await fs.ensureFile(pkgOptions.entry)
+      }
+
+      const obj =  {
+        name: pkgOptions.name,
+        description: pkgOptions.description,
+        version: '0.0.0',
+        entry: path.relative(this.projectLocation, pkgOptions.entry),
+      }
+
+      // write component into projDB
+      await this.getDB().set(`components.${pkgOptions.name}`, obj).write()
+
+      return obj
     }
 }
