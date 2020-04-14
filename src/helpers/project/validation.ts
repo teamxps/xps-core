@@ -1,7 +1,12 @@
 import {lookup} from '../general/fs-helper'
 import * as Constants from './constants'
 
+interface ProjectExistsOptions {
+  startDir?: string;
+  current?: boolean; // only look in current directory
+}
+
 // check if a project exists, if so return it's path, else null
-export function projectExists(startDir: string = process.cwd()) {
-  return lookup(Constants.XPS_PROJECT_DIR, startDir)
+export function projectExists(opts: ProjectExistsOptions) {
+  return lookup(Constants.XPS_PROJECT_DIR, (opts.startDir) ? opts.startDir : process.cwd(), (opts.current) ? 1 : undefined)
 }

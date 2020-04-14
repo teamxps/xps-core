@@ -1,25 +1,38 @@
 import {Command, flags} from '@oclif/command'
+import {prompt} from 'enquirer'
 
 export default class NewPackage extends Command {
   static description = 'describe the command here'
 
+  static aliases = ['new:pkg', 'new:mod', 'new:module']
+
   static flags = {
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name to print'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
   }
 
-  static args = [{name: 'file'}]
+  static args = [{name: 'dirname'}]
 
   async run() {
     const {args, flags} = this.parse(NewPackage)
+    // check for project
 
-    const name = flags.name || 'world'
-    this.log(`hello ${name} from C:\\Users\\chris\\Documents\\teamxps\\xps\\src\\commands\\new\\package.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
+    const response = await prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the module name?',
+      },
+      {
+        type: 'input',
+        name: 'description',
+        message: 'What is the module description?',
+      },
+      {
+        type: 'input',
+        name: 'entry',
+        message: 'Entry file?',
+        initial: 'index.js',
+      },
+    ])
   }
 }

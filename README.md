@@ -49,6 +49,8 @@ USAGE
 <!-- commands -->
 * [`xps hello [FILE]`](#xps-hello-file)
 * [`xps help [COMMAND]`](#xps-help-command)
+* [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)
+* [`xps new:project [DIRNAME]`](#xps-newproject-dirname)
 
 ## `xps hello [FILE]`
 
@@ -86,6 +88,43 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
+
+## `xps new:package [DIRNAME]`
+
+describe the command here
+
+```
+USAGE
+  $ xps new:package [DIRNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps new:pkg
+  $ xps new:mod
+  $ xps new:module
+```
+
+_See code: [src\commands\new\package.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\new\package.ts)_
+
+## `xps new:project [DIRNAME]`
+
+describe the command here
+
+```
+USAGE
+  $ xps new:project [DIRNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps new:proj
+  $ xps new:project
+```
+
+_See code: [src\commands\new\project.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\new\project.ts)_
 <!-- commandsstop -->
 * [`xps hello [FILE]`](#xps-hello-file)
 * [`xps help [COMMAND]`](#xps-help-command)
