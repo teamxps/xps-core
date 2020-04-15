@@ -20,5 +20,12 @@ export default class SnapshotAll extends Command {
 
     // get reference
     await project.init()
+
+    // get pkgRef
+    const pkg = await project.getPkgRef(args.pkgName)
+
+    // create full snapshot
+    const snapshot = await pkg.createFullSnapshot()
+    console.log(pkg.displaySnapshotObj(snapshot))
   }
 }

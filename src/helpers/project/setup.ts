@@ -10,9 +10,11 @@ export async function initDatabase(setupDir: string = path.resolve(process.cwd()
   const objectsDir = path.resolve(projectDir, Constants.XPS_OBJECTS_DIR)
   await fs.ensureDir(projectDir) // .xps/prefix dir
   await fs.ensureDir(objectsDir) // .xps/prefix/objects dir
+  /* remove this shit
   Constants.XPS_DATABASES.forEach(async dbname => { // .xps/prefix/objects/$databaseName dir
     await fs.ensureDir(path.resolve(objectsDir, dbname))
   })
+  */
 }
 
 // write an xps.json for xps project

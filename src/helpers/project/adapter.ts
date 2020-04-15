@@ -6,6 +6,7 @@ import * as path from 'path'
 import * as fs from 'fs-extra'
 import * as Constants from './constants'
 import {initJSON} from './setup'
+import XPSPackage from '../package/adapter'
 
 interface XPSProjectOpts{
     projectDir?: string; // the location of .xps folder
@@ -20,7 +21,7 @@ interface XPSPackageOptions {
 class XPSProjectError extends Error {}
 
 export default class XPSProject {
-    projectLocation = ''; // location of .xps folder
+    projectLocation = ''; // absolute location of .xps folder
 
     private xpsDBRef: any; // ref to db
 
@@ -51,6 +52,26 @@ export default class XPSProject {
       if (!this.isInit)
         throw new XPSProjectError('xps project adapter not initialized')
       return this.xpsDBRef
+    }
+
+    // get a ref to a pkg object given string
+    async getPkgRef(name: string) {
+      // check if pkg with name exists
+      const pkgExists = await this.getDB().get(`components.${name}`).value()
+      if (!pkgExists) {
+        throw new XPSProjectError('no such package with name')
+      }
+
+      // generate new pkg ref
+      const pkg = new XPSPackage({
+        name: name,
+        projectLocation: this.projectLocation,
+        packageLocation: path.resolve(this.projectLocation, name),
+        entryLocation: path.resolve(this.projectLocation, pkgExists.entry),
+        xpsDBRef: this.getDB(),
+      })
+
+      return pkg
     }
 
     // add a new package to this project
