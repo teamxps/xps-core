@@ -67,6 +67,8 @@ USAGE
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)
 * [`xps new:project [DIRNAME]`](#xps-newproject-dirname)
+* [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
+* [`xps snapshot:status [FILE]`](#xps-snapshotstatus-file)
 
 ## `xps help [COMMAND]`
 
@@ -138,6 +140,39 @@ ALIASES
 ```
 
 _See code: [src\commands\new\project.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\new\project.ts)_
+
+## `xps snapshot:all [PKGNAME]`
+
+Create a package snapshot of all file changes
+
+```
+USAGE
+  $ xps snapshot:all [PKGNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps snap:all
+```
+
+_See code: [src\commands\snapshot\all.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\snapshot\all.ts)_
+
+## `xps snapshot:status [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ xps snapshot:status [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src\commands\snapshot\status.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\snapshot\status.ts)_
 <!-- commandsstop -->
 * [`xps help [COMMAND]`](#xps-help-command)
 * [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)

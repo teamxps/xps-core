@@ -56,7 +56,7 @@ export async function getDependencies(entry: string) {
       const visitContent = await (await fs.readFile(fileExists)).toString()
       // hashcontent use that as key
       const hash = hashContent(visitContent)
-      dependencies[hash] = path.relative(path.dirname(entry), fileExists) // store relative position
+      dependencies[path.relative(path.dirname(entry), fileExists)] = hash// store relative position
 
         visitContent.match(IMPORT_PRESENT)?.forEach(p => {
           let src = p.match(IMPORT_SRC)[0]
