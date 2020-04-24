@@ -42,9 +42,9 @@ export default class XPSPackage {
     async genChanges() {
       const db = await this.xpsDBRef.get(`components.${this.name}`)
       const history = await db.get('history').value()
+      const currentDependencies = await getDependencies(this.entryLocation)
       if (history) { // check if there was even a previous snapshot
         const recentDependencies = await this.getObj(history[0]).then(str => JSON.parse(str).dependencies)
-        const currentDependencies = await getDependencies(this.entryLocation)
 
         // compare npm dependencies
         const npmDiffs = {
@@ -63,6 +63,10 @@ export default class XPSPackage {
         })
 
         return {fileChanges: fileDiffs, npmChanges: npmDiffs}
+      }
+      return {
+        fileChanges: currentDependencies.fileDependencies,
+        npmChanges: {additions: currentDependencies.npmDependencies},
       }
     }
 
