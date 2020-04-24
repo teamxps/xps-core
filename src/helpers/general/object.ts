@@ -37,5 +37,5 @@ export async function createHashedContent(content: string, outputDir: string) {
 // read a .gz compressed file
 export async function readGzip(filepath: string) {
   const content = await fs.readFile(filepath)
-  return util.promisify(zlib.gunzip)(content).toString()
+  return util.promisify(zlib.gunzip)(content).then(b => b.toString())
 }

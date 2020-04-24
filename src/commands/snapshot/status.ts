@@ -21,6 +21,12 @@ export default class SnapshotStatus extends Command {
     // get reference
     await project.init()
 
+    // get pkgRef
+    const pkg = await project.getPkgRef(args.pkgName)
+
+    // create full snapshot
     // show diffs
+    const diffs = await pkg.genChanges()
+    console.log(diffs)
   }
 }
