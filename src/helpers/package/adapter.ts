@@ -42,12 +42,15 @@ export default class XPSPackage {
     async genChanges() {
       const db = await this.xpsDBRef.get(`components.${this.name}`)
       const history = await db.get('history').value()
-      if (history) {
+      if (history) { // check if there was even a previous snapshot
         const recentDependencies = await this.getObj(history[0]).then(str => JSON.parse(str).dependencies)
         const currentDependencies = await getDependencies(this.entryLocation)
 
         // compare npm dependencies
-        const npmDiffs = _.difference(currentDependencies.npmDependencies, recentDependencies.npmDependencies)
+        const npmDiffs = {
+          additions: _.difference(currentDependencies.npmDependencies, recentDependencies.npmDependencies),
+          removals: _.difference(recentDependencies.npmDependencies, currentDependencies.npmDependencies),
+        }
         const fileDiffs: any = {}
         Object.keys(currentDependencies.fileDependencies).forEach((d: string) => {
           if (recentDependencies.fileDependencies[d]) { // check for file changes
@@ -61,6 +64,24 @@ export default class XPSPackage {
 
         return {fileChanges: fileDiffs, npmChanges: npmDiffs}
       }
+    }
+
+    // string representation of snapshots from diff obj
+    displayChangesObj(obj: any) {
+      let rep = ''
+      rep += 'Changes not in snapshot:\n\n'
+      rep += 'File Changes:\n'
+      Object.keys(obj.fileChanges).forEach((f: string) => {
+        rep += `modified:   ${f}\n`
+      })
+      rep += '\nnpm Changes:\n'
+      obj.npmChanges.additions.forEach((n: string) => {
+        rep += `Added:   ${n}\n`
+      })
+      obj.npmChanges.removals.forEach((n: string) => {
+        rep += `Removed:   ${n}\n`
+      })
+      return rep
     }
 
     // string representation of snapshot from object

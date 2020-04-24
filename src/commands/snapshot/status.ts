@@ -27,6 +27,6 @@ export default class SnapshotStatus extends Command {
     // create full snapshot
     // show diffs
     const diffs = await pkg.genChanges()
-    console.log(diffs)
+    this.log(pkg.displayChangesObj(diffs))
   }
 }
