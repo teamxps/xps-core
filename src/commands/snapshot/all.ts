@@ -26,6 +26,6 @@ export default class SnapshotAll extends Command {
 
     // create full snapshot
     const snapshot = await pkg.createFullSnapshot()
-    console.log(pkg.displaySnapshotObj(snapshot))
+    this.log(pkg.displaySnapshotObj(snapshot))
   }
 }
