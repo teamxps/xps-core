@@ -8,19 +8,17 @@ interface PackageXPSJson {
   entry: string;
 }
 
-export default class NewPackage extends Command {
-  static description = 'Create a new xps pkg tracker'
+export default class InitPackage extends Command {
+  static description = 'Create a new xps package'
 
-  static aliases = ['new:pkg', 'new:mod', 'new:module']
+  static aliases = ['init:pkg', 'init:package']
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
 
-  static args = [{name: 'dirname'}]
-
   async run() {
-    const {args, flags} = this.parse(NewPackage)
+    this.parse(InitPackage)
 
     // create new project adapter
     const project = new XPSProject()

@@ -7,6 +7,7 @@ import * as fs from 'fs-extra'
 import * as Constants from './constants'
 import {initJSON} from './setup'
 import XPSPackage from '../package/adapter'
+import {readGzip} from '../general/object'
 
 interface XPSProjectOpts{
     projectDir?: string; // the location of .xps folder
@@ -66,7 +67,7 @@ export default class XPSProject {
       const pkg = new XPSPackage({
         name: name,
         projectLocation: this.projectLocation,
-        packageLocation: path.resolve(this.projectLocation, name),
+        packageLocation: path.resolve(this.projectLocation), // , name),
         entryLocation: path.resolve(this.projectLocation, pkgExists.entry),
         xpsDBRef: this.getDB(),
       })
@@ -103,8 +104,13 @@ export default class XPSProject {
       await this.getDB().set(`components.${pkgOptions.name}`, obj).write()
 
       // create database dirs
-      await initDatabase(this.projectLocation, pkgOptions.name)
+      await initDatabase(this.projectLocation)// , pkgOptions.name)
 
       return obj
+    }
+
+    // get object content
+    async getObj(hash: string) {
+      return readGzip(path.resolve(this.projectLocation, Constants.XPS_OBJECTS_DIR, hash))
     }
 }

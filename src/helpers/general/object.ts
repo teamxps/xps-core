@@ -34,6 +34,17 @@ export async function createHashedContent(content: string, outputDir: string) {
   return hash
 }
 
+// compress a file and export it to a given outputdir
+export async function createContent(content: string, name: string, outputDir: string) {
+  // create stream and push content
+  const input = new Stream.Readable()
+  input.push(content)
+  input.push(null)
+
+  await pipeline(input, zlib.createGzip(), fs.createWriteStream(`${outputDir}/${name}`))
+  return name
+}
+
 // read a .gz compressed file
 export async function readGzip(filepath: string) {
   const content = await fs.readFile(filepath)

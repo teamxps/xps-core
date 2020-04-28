@@ -1,9 +1,10 @@
 import {Command, flags} from '@oclif/command'
 import XPSProject from '../../helpers/project/adapter'
-export default class NewProject extends Command {
+
+export default class InitProject extends Command {
   static description = 'Create a new xps project'
 
-  static aliases = ['new:proj', 'new:project']
+  static aliases = ['init', 'init:proj', 'init:project']
 
   static flags = {
     help: flags.help({char: 'h'}),
@@ -12,7 +13,7 @@ export default class NewProject extends Command {
   static args = [{name: 'dirname'}]
 
   async run() {
-    const {args, flags} = this.parse(NewProject)
+    const {args} = this.parse(InitProject)
 
     // create new project from adapter
     const project = new XPSProject()

@@ -36,9 +36,10 @@ USAGE
 # Commands
 <!-- commands -->
 * [`xps help [COMMAND]`](#xps-help-command)
+* [`xps init:package`](#xps-initpackage)
+* [`xps init:project [DIRNAME]`](#xps-initproject-dirname)
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
-* [`xps new:package [DIRNAME]`](#xps-newpackage-dirname)
-* [`xps new:project [DIRNAME]`](#xps-newproject-dirname)
+* [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
 * [`xps snapshot:status PKGNAME`](#xps-snapshotstatus-pkgname)
 
@@ -59,6 +60,43 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
 
+## `xps init:package`
+
+Create a new xps package
+
+```
+USAGE
+  $ xps init:package
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps init:pkg
+  $ xps init:package
+```
+
+_See code: [src\commands\init\package.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\init\package.ts)_
+
+## `xps init:project [DIRNAME]`
+
+Create a new xps project
+
+```
+USAGE
+  $ xps init:project [DIRNAME]
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps init
+  $ xps init:proj
+  $ xps init:project
+```
+
+_See code: [src\commands\init\project.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\init\project.ts)_
+
 ## `xps meta:dependency FILE`
 
 List the dependencies for an entry file
@@ -72,46 +110,28 @@ OPTIONS
 
 ALIASES
   $ xps meta:dep
+  $ xps meta:dependency
 ```
 
 _See code: [src\commands\meta\dependency.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\dependency.ts)_
 
-## `xps new:package [DIRNAME]`
+## `xps meta:hashobject [HASH]`
 
-Create a new xps pkg tracker
+Gives the file content for a corresponding hashobject
 
 ```
 USAGE
-  $ xps new:package [DIRNAME]
+  $ xps meta:hashobject [HASH]
 
 OPTIONS
   -h, --help  show CLI help
 
 ALIASES
-  $ xps new:pkg
-  $ xps new:mod
-  $ xps new:module
+  $ xps meta:hashobj
+  $ xps meta:hashobject
 ```
 
-_See code: [src\commands\new\package.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\new\package.ts)_
-
-## `xps new:project [DIRNAME]`
-
-Create a new xps project
-
-```
-USAGE
-  $ xps new:project [DIRNAME]
-
-OPTIONS
-  -h, --help  show CLI help
-
-ALIASES
-  $ xps new:proj
-  $ xps new:project
-```
-
-_See code: [src\commands\new\project.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\new\project.ts)_
+_See code: [src\commands\meta\hashobject.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\hashobject.ts)_
 
 ## `xps snapshot:all [PKGNAME]`
 

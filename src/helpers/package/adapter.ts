@@ -3,6 +3,7 @@ import {createHashedContent, readGzip} from '../general/object'
 import * as Constants from '../project/constants'
 import * as path from 'path'
 import * as os from 'os'
+import * as fs from 'fs-extra'
 import _ = require('lodash')
 
 interface XPSPackageOptions {
@@ -103,6 +104,15 @@ export default class XPSPackage {
       const db = await this.xpsDBRef.get(`components.${this.name}`)
       let history = await db.get('history').value()
       const dependencies = await getDependencies(this.entryLocation)
+      // write dependencies as objects
+      const fileDependencies = Object.keys(dependencies.fileDependencies)
+      for (let i = 0; i < fileDependencies.length; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const content = await fs.readFile(fileDependencies[i]).then(b => b.toString())
+        // eslint-disable-next-line no-await-in-loop
+        await createHashedContent(content, path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR))
+      }
+
       const snapshot = {
         author: process.env.USER || os.userInfo().username,
         date: Date.now(),
