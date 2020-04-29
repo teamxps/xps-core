@@ -143,6 +143,7 @@ USAGE
   $ xps scope:select
 
 OPTIONS
+  -a, --all
   -h, --help         show CLI help
   -i, --interactive
 
@@ -181,7 +182,9 @@ OPTIONS
   -h, --help  show CLI help
 
 ALIASES
-  $ xps snap:all
+  $ xps snap:status
+  $ xps snapshot:status
+  $ xps status
 ```
 
 _See code: [src\commands\snapshot\status.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\snapshot\status.ts)_

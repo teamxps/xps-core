@@ -4,13 +4,13 @@ import XPSProject from '../../helpers/project/adapter'
 export default class SnapshotStatus extends Command {
   static description = 'Show the status of snapshot changes'
 
-  static aliases = ['snap:all']
+  static aliases = ['snap:status', 'snapshot:status', 'status']
 
   static flags = {
     help: flags.help({char: 'h'}),
   }
 
-  static args = [{name: 'pkgName', required: true}]
+  static args = [{name: 'pkgName', required: false}]
 
   async run() {
     const {args, flags} = this.parse(SnapshotStatus)
@@ -21,12 +21,26 @@ export default class SnapshotStatus extends Command {
     // get reference
     await project.init()
 
-    // get pkgRef
-    const pkg = await project.getPkgRef(args.pkgName)
+    // explicit pkgname
+    if (args.pkgName) {
+      const pkg = await project.getPkgRef(args.pkgName)
 
-    // create full snapshot
-    // show diffs
-    const diffs = await pkg.genChanges()
-    this.log(pkg.displayChangesObj(diffs))
+      // show file diffs
+      const diffs = await pkg.genChanges()
+      return this.log(pkg.displayChangesObj(diffs))
+    }
+
+    // get pkgRef for each component in scope
+    const scope = await project.getScope()
+    for (let i = 0; i < scope.length; i++) {
+      // eslint-disable-next-line no-await-in-loop
+      const pkg = await project.getPkgRef(scope[i])
+
+      // show file diffs
+      // eslint-disable-next-line no-await-in-loop
+      const diffs = await pkg.genChanges()
+      this.log(scope[i])
+      this.log(pkg.displayChangesObj(diffs))
+    }
   }
 }

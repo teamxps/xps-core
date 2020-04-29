@@ -75,17 +75,26 @@ export default class XPSPackage {
     displayChangesObj(obj: any) {
       let rep = ''
       rep += 'Changes not in snapshot:\n\n'
+      // file changes
       rep += 'File Changes:\n'
-      Object.keys(obj.fileChanges).forEach((f: string) => {
-        rep += `modified:   ${f}\n`
-      })
+      if (obj.fileChanges) {
+        Object.keys(obj.fileChanges).forEach((f: string) => {
+          rep += `modified:   ${f}\n`
+        })
+      }
+      // npm changes
       rep += '\nnpm Changes:\n'
-      obj.npmChanges.additions.forEach((n: string) => {
-        rep += `Added:   ${n}\n`
-      })
-      obj.npmChanges.removals.forEach((n: string) => {
-        rep += `Removed:   ${n}\n`
-      })
+      if (obj.npmChanges) {
+        if (obj.npmChanges.additions)
+          obj.npmChanges.additions.forEach((n: string) => {
+            rep += `Added:   ${n}\n`
+          })
+        if (obj.npmChanges.removals)
+          obj.npmChanges.removals.forEach((n: string) => {
+            rep += `Removed:   ${n}\n`
+          })
+      }
+
       return rep
     }
 
