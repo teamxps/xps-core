@@ -42,7 +42,7 @@ USAGE
 * [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
 * [`xps scope:select`](#xps-scopeselect)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
-* [`xps snapshot:status PKGNAME`](#xps-snapshotstatus-pkgname)
+* [`xps snapshot:status [PKGNAME]`](#xps-snapshotstatus-pkgname)
 
 ## `xps help [COMMAND]`
 
@@ -165,18 +165,19 @@ OPTIONS
   -h, --help  show CLI help
 
 ALIASES
-  $ xps snap:all
+  $ xps snapshot
+  $ xps snap
 ```
 
 _See code: [src\commands\snapshot\all.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\snapshot\all.ts)_
 
-## `xps snapshot:status PKGNAME`
+## `xps snapshot:status [PKGNAME]`
 
 Show the status of snapshot changes
 
 ```
 USAGE
-  $ xps snapshot:status PKGNAME
+  $ xps snapshot:status [PKGNAME]
 
 OPTIONS
   -h, --help  show CLI help
