@@ -39,6 +39,22 @@ export default class XPSProject {
       this.isInit = true
     }
 
+    // set the project scope
+    async setScope(scope: Array<string> | string, all = false) {
+      if (all) {
+        const components = await this.getDB().get('components').value()
+        await this.getDB().set('scope', Object.keys(components)).write()
+        return Object.keys(components)
+      }
+      await this.getDB().set('scope', scope).write()
+      return scope
+    }
+
+    // get the project scope
+    async getScope() {
+      return this.getDB().get('scope').value()
+    }
+
     // setup and create a new project
     async createNewProject(setupDir = '') {
       const projExists = await projectExists({startDir: setupDir, current: true})

@@ -40,6 +40,7 @@ USAGE
 * [`xps init:project [DIRNAME]`](#xps-initproject-dirname)
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
+* [`xps scope:select`](#xps-scopeselect)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
 * [`xps snapshot:status PKGNAME`](#xps-snapshotstatus-pkgname)
 
@@ -132,6 +133,24 @@ ALIASES
 ```
 
 _See code: [src\commands\meta\hashobject.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\hashobject.ts)_
+
+## `xps scope:select`
+
+Select the project tracking scope
+
+```
+USAGE
+  $ xps scope:select
+
+OPTIONS
+  -h, --help         show CLI help
+  -i, --interactive
+
+ALIASES
+  $ xps scope
+```
+
+_See code: [src\commands\scope\select.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\scope\select.ts)_
 
 ## `xps snapshot:all [PKGNAME]`
 
