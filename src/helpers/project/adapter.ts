@@ -8,6 +8,7 @@ import * as Constants from './constants'
 import {initJSON} from './setup'
 import XPSPackage from '../package/adapter'
 import {readGzip} from '../general/object'
+import {any} from 'bluebird'
 
 interface XPSProjectOpts{
     projectDir?: string; // the location of .xps folder
@@ -53,6 +54,12 @@ export default class XPSProject {
     // get the project scope
     async getScope() {
       return this.getDB().get('scope').value()
+    }
+
+    // get a list of components
+    async getComponentNames() {
+      const components = await this.getDB().get('components').value()
+      return Object.keys(components)
     }
 
     // setup and create a new project

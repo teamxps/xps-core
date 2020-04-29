@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import XPSProject from '../../helpers/project/adapter'
 import * as _ from 'lodash'
+import {MultiSelect}  from 'enquirer'
 
 export default class ScopeSelect extends Command {
   static strict = false
@@ -29,9 +30,22 @@ export default class ScopeSelect extends Command {
     // get reference
     await project.init()
 
+    // check if scope is all
     if (flags.all) {
       const scope = await project.setScope('all', true)
       return this.log(`Scope set to all components: ${scope}`)
+    }
+
+    // check if interactive
+    if (flags.interactive) {
+      const choices = await project.getComponentNames()
+      const prompt = new MultiSelect({
+        name: 'value',
+        message: 'Select components to scope\nPress space to toggle components, Press enter to submit',
+        choices: choices.map(c => ({name: c, value: c})),
+      })
+      const scope = await prompt.run()
+      return this.log(`Scope set to the following components: ${scope}`)
     }
 
     // if null print out scope
