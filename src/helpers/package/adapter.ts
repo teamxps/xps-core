@@ -64,17 +64,18 @@ export default class XPSPackage {
 
           ),
         }
-        return {fileChanges: fileDiffs, npmChanges: npmDiffs}
+        return {fileChanges: fileDiffs, npmChanges: npmDiffs, hash: history[0]}
       }
       return {
         fileChanges: currentDependencies.fileDependencies,
         npmChanges: {additions: currentDependencies.npmDependencies},
+        hash: history[0],
       }
     }
 
     // string representation of snapshots from diff obj
     displayChangesObj(obj: any) {
-      let rep = ''
+      let rep = `Latest snapshot: ${obj.hash}\n`
       // eslint-disable-next-line unicorn/explicit-length-check
       if (!Object.keys(obj.fileChanges).length && !obj.npmChanges.additions.length && !obj.npmChanges.removals.length) {
         return 'nothing to snapshot'
@@ -91,7 +92,7 @@ export default class XPSPackage {
           })
         if (obj.fileChanges.removals)
           obj.fileChanges.removals.forEach((f: string) => {
-            rep += `removals:   ${f}\n`
+            rep += `removed:   ${f}\n`
           })
         if (obj.fileChanges.modifications)
           obj.fileChanges.modifications.forEach((f: string) => {
@@ -104,11 +105,11 @@ export default class XPSPackage {
         rep += '\nnpm Changes:\n'
         if (obj.npmChanges.additions)
           obj.npmChanges.additions.forEach((n: string) => {
-            rep += `Added:   ${n}\n`
+            rep += `added:   ${n}\n`
           })
         if (obj.npmChanges.removals)
           obj.npmChanges.removals.forEach((n: string) => {
-            rep += `Removed:   ${n}\n`
+            rep += `removed:   ${n}\n`
           })
       }
 
