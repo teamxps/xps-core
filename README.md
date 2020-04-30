@@ -41,7 +41,8 @@ USAGE
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
 * [`xps remote:add NAME PATH`](#xps-remoteadd-name-path)
-* [`xps remote:get NAME PATH`](#xps-remoteget-name-path)
+* [`xps remote:delete NAME TYPE`](#xps-remotedelete-name-type)
+* [`xps remote:get`](#xps-remoteget)
 * [`xps scope:select`](#xps-scopeselect)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
 * [`xps snapshot:status [PKGNAME]`](#xps-snapshotstatus-pkgname)
@@ -153,19 +154,34 @@ OPTIONS
 
 _See code: [src\commands\remote\add.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\remote\add.ts)_
 
-## `xps remote:get NAME PATH`
+## `xps remote:delete NAME TYPE`
+
+Delete a remote or its properties
+
+```
+USAGE
+  $ xps remote:delete NAME TYPE
+
+OPTIONS
+  -h, --help  show CLI help
+
+ALIASES
+  $ xps remote:delete
+  $ xps remote:del
+```
+
+_See code: [src\commands\remote\delete.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\remote\delete.ts)_
+
+## `xps remote:get`
 
 Output remote information
 
 ```
 USAGE
-  $ xps remote:get NAME PATH
+  $ xps remote:get
 
 OPTIONS
-  -a, --all
-  -f, --fetch
-  -h, --help   show CLI help
-  -p, --push
+  -h, --help  show CLI help
 
 ALIASES
   $ xps remote:get

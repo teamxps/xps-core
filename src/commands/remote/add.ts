@@ -2,19 +2,20 @@ import {Command, flags} from '@oclif/command'
 import XPSProject from '../../helpers/project/adapter'
 
 export default class RemoteAdd extends Command {
-  static description = 'describe the command here'
+  static description = 'Add a remote to the project'
 
   static flags = {
     help: flags.help({char: 'h'}),
-    fetch: flags.boolean({char: 'f'}),
-    push: flags.boolean({char: 'p'}),
-    all: flags.boolean({char: 'a', default: true, exclusive: ['push', 'fetch']}),
   }
 
-  static args = [{name: 'name', required: true}, {name: 'path', required: true}]
+  static args = [
+    {name: 'name', required: true},
+    {name: 'path', required: true},
+    {name: 'type', required: true, default: 'all', options: ['fetch', 'push', 'all']},
+  ]
 
   async run() {
-    const {args, flags} = this.parse(RemoteAdd)
+    const {args} = this.parse(RemoteAdd)
 
     // create new project adapter
     const project = new XPSProject()
@@ -23,14 +24,14 @@ export default class RemoteAdd extends Command {
     await project.init()
 
     // set remotes
-    if (flags.fetch || flags.all) {
+    if (args.type === 'fetch' || args.type === 'all') {
       await project.setRemotes(args.name, args.path, 'fetch')
       this.log(`${args.name}  ${args.path}  (fetch)`)
     }
 
-    if (flags.push || flags.all) {
-      await project.setRemotes(args.name, args.path, 'pull')
-      this.log(`${args.name}  ${args.path}  (fetch)`)
+    if (args.type === 'push' || args.type === 'all') {
+      await project.setRemotes(args.name, args.path, 'push')
+      this.log(`${args.name}  ${args.path}  (push)`)
     }
   }
 }

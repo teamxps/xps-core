@@ -20,7 +20,16 @@ export default class RemoteGet extends Command {
     await project.init()
 
     const remotes = await project.getRemotes()
-    this.log(remotes)
+    Object.keys(remotes).forEach(remote => {
+      this.log()
+      if (remotes[remote].fetch) {
+        this.log(`${remote}  ${remotes[remote].fetch}  (fetch)`)
+      }
+
+      if (remotes[remote].push) {
+        this.log(`${remote}  ${remotes[remote].push}  (push)`)
+      }
+    })
   }
 }
 
