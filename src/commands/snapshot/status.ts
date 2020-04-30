@@ -39,7 +39,7 @@ export default class SnapshotStatus extends Command {
       // show file diffs
       // eslint-disable-next-line no-await-in-loop
       const diffs = await pkg.genChanges()
-      this.log(scope[i])
+      this.log(`Component ID: ${scope[i]}`)
       this.log(pkg.displayChangesObj(diffs))
     }
   }

@@ -14,7 +14,7 @@ export default class ScopeSelect extends Command {
     help: flags.help({char: 'h'}),
     interactive: flags.boolean({
       char: 'i',
-      default: true,
+      default: false,
     }),
     all: flags.boolean({
       char: 'a',
@@ -45,6 +45,7 @@ export default class ScopeSelect extends Command {
         choices: choices.map(c => ({name: c, value: c})),
       })
       const scope = await prompt.run()
+      await project.setScope(scope)
       return this.log(`Scope set to the following components: ${scope}`)
     }
 

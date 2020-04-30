@@ -77,13 +77,14 @@ export default class XPSPackage {
     displayChangesObj(obj: any) {
       let rep = `Latest snapshot: ${obj.hash}\n`
       // eslint-disable-next-line unicorn/explicit-length-check
-      if (!Object.keys(obj.fileChanges).length && !obj.npmChanges.additions.length && !obj.npmChanges.removals.length) {
-        return 'nothing to snapshot'
+      if (!obj.fileChanges.additions.length && !obj.fileChanges.removals.length && !obj.fileChanges.modifications.length && !obj.npmChanges.additions.length && !obj.npmChanges.removals.length) {
+        return rep + 'No changes to snapshot\n'
       }
 
       rep += 'Changes not in snapshot:\n\n'
 
-      if (obj.fileChanges) {
+      // eslint-disable-next-line unicorn/explicit-length-check
+      if (obj.fileChanges.additions && obj.fileChanges.removals && obj.fileChanges.modifications) {
         // file changes
         rep += 'File Changes:\n'
         if (obj.fileChanges.additions)
@@ -100,7 +101,8 @@ export default class XPSPackage {
           })
       }
 
-      if (obj.npmChanges) {
+      // eslint-disable-next-line unicorn/explicit-length-check
+      if (obj.npmChanges.additions && obj.npmChanges.removals) {
         // npm changes
         rep += '\nnpm Changes:\n'
         if (obj.npmChanges.additions)

@@ -39,6 +39,7 @@ export default class SnapshotAll extends Command {
       // show file diffs
       // eslint-disable-next-line no-await-in-loop
       const snapshot = await pkg.createFullSnapshot()
+      this.log(`Component ID: ${scope[i]}`)
       this.log(pkg.displaySnapshotObj(snapshot))
     }
   }
