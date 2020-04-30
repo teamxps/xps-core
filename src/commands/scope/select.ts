@@ -1,7 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import XPSProject from '../../helpers/project/adapter'
 import * as _ from 'lodash'
-import {MultiSelect}  from 'enquirer'
+const {MultiSelect} = require('enquirer')
 
 export default class ScopeSelect extends Command {
   static strict = false

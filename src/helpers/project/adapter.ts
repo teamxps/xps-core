@@ -40,6 +40,16 @@ export default class XPSProject {
       this.isInit = true
     }
 
+    // set project remotes
+    async setRemotes(remoteName: string, remotePath: string, remoteType: 'fetch' | 'pull') {
+      await this.getDB().set(`remotes.${remoteName}.${remoteType}`, remotePath).write()
+    }
+
+    // get all project remotes
+    async getRemotes() {
+      return this.getDB().get('remotes').value()
+    }
+
     // set the project scope
     async setScope(scope: Array<string> | string, all = false) {
       if (all) {

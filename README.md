@@ -40,6 +40,8 @@ USAGE
 * [`xps init:project [DIRNAME]`](#xps-initproject-dirname)
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
+* [`xps remote:add NAME PATH`](#xps-remoteadd-name-path)
+* [`xps remote:get NAME PATH`](#xps-remoteget-name-path)
 * [`xps scope:select`](#xps-scopeselect)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
 * [`xps snapshot:status [PKGNAME]`](#xps-snapshotstatus-pkgname)
@@ -133,6 +135,44 @@ ALIASES
 ```
 
 _See code: [src\commands\meta\hashobject.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\hashobject.ts)_
+
+## `xps remote:add NAME PATH`
+
+describe the command here
+
+```
+USAGE
+  $ xps remote:add NAME PATH
+
+OPTIONS
+  -a, --all
+  -f, --fetch
+  -h, --help   show CLI help
+  -p, --push
+```
+
+_See code: [src\commands\remote\add.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\remote\add.ts)_
+
+## `xps remote:get NAME PATH`
+
+Output remote information
+
+```
+USAGE
+  $ xps remote:get NAME PATH
+
+OPTIONS
+  -a, --all
+  -f, --fetch
+  -h, --help   show CLI help
+  -p, --push
+
+ALIASES
+  $ xps remote:get
+  $ xps remote
+```
+
+_See code: [src\commands\remote\get.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\remote\get.ts)_
 
 ## `xps scope:select`
 
