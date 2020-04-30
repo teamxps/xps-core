@@ -28,6 +28,10 @@ export async function getDependencies(entry: string) {
   const dependencies: any = {}// flattened list of dependencies
   const visited = [entry] // keep track of visited paths
   const stack: string[] = [] // keep track of srcs to visit
+
+  // put itself as a dependency
+  dependencies[path.basename(entry)] = hashContent(fileContent)
+
   fileContent.match(IMPORT_PRESENT)?.forEach(p => {
     let src = p.match(IMPORT_SRC)[0]
     src = src.substring(1, src.length - 1)

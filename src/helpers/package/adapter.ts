@@ -52,17 +52,18 @@ export default class XPSPackage {
           additions: _.difference(currentDependencies.npmDependencies, recentDependencies.npmDependencies),
           removals: _.difference(recentDependencies.npmDependencies, currentDependencies.npmDependencies),
         }
-        const fileDiffs: any = {}
-        Object.keys(currentDependencies.fileDependencies).forEach((d: string) => {
-          if (recentDependencies.fileDependencies[d]) { // check for file changes
-            if (recentDependencies.fileDependencies[d] !== currentDependencies.fileDependencies[d]) {
-              fileDiffs[d] = currentDependencies.fileDependencies[d]
-            }
-          } else { // new file
-            fileDiffs[d] = currentDependencies.fileDependencies[d]
+        // compare file diffs
+        const fileDiffs = {
+          additions: _.difference(Object.keys(currentDependencies.fileDependencies), Object.keys(recentDependencies.fileDependencies)),
+          removals: _.difference(Object.keys(recentDependencies.fileDependencies), Object.keys(currentDependencies.fileDependencies)),
+          modifications: _.intersection(Object.keys(currentDependencies.fileDependencies), Object.keys(recentDependencies.fileDependencies))
+          .filter(k => {
+            // console.log(`${currentDependencies.fileDependencies[k]}\n${recentDependencies.fileDependencies[k]}`)
+            return currentDependencies.fileDependencies[k] !== recentDependencies.fileDependencies[k]
           }
-        })
 
+          ),
+        }
         return {fileChanges: fileDiffs, npmChanges: npmDiffs}
       }
       return {
@@ -74,17 +75,33 @@ export default class XPSPackage {
     // string representation of snapshots from diff obj
     displayChangesObj(obj: any) {
       let rep = ''
-      rep += 'Changes not in snapshot:\n\n'
-      // file changes
-      rep += 'File Changes:\n'
-      if (obj.fileChanges) {
-        Object.keys(obj.fileChanges).forEach((f: string) => {
-          rep += `modified:   ${f}\n`
-        })
+      // eslint-disable-next-line unicorn/explicit-length-check
+      if (!Object.keys(obj.fileChanges).length && !obj.npmChanges.additions.length && !obj.npmChanges.removals.length) {
+        return 'nothing to snapshot'
       }
-      // npm changes
-      rep += '\nnpm Changes:\n'
+
+      rep += 'Changes not in snapshot:\n\n'
+
+      if (obj.fileChanges) {
+        // file changes
+        rep += 'File Changes:\n'
+        if (obj.fileChanges.additions)
+          obj.fileChanges.additions.forEach((f: string) => {
+            rep += `additions:   ${f}\n`
+          })
+        if (obj.fileChanges.removals)
+          obj.fileChanges.removals.forEach((f: string) => {
+            rep += `removals:   ${f}\n`
+          })
+        if (obj.fileChanges.modifications)
+          obj.fileChanges.modifications.forEach((f: string) => {
+            rep += `modified:   ${f}\n`
+          })
+      }
+
       if (obj.npmChanges) {
+        // npm changes
+        rep += '\nnpm Changes:\n'
         if (obj.npmChanges.additions)
           obj.npmChanges.additions.forEach((n: string) => {
             rep += `Added:   ${n}\n`
