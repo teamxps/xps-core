@@ -18,6 +18,7 @@ interface XPSPackageOptions {
   name: string;
   description?: string;
   entry: string;
+  from: string;
 }
 
 class XPSProjectError extends Error {}
@@ -39,6 +40,8 @@ export default class XPSProject {
 
       this.isInit = true
     }
+
+    async fetchPackages() {}
 
     // set project remotes
     async setRemotes(remoteName: string, remotePath: string, remoteType: 'fetch' | 'push') {
@@ -95,7 +98,7 @@ export default class XPSProject {
     // get a ref to a pkg object given string
     async getPkgRef(name: string) {
       // check if pkg with name exists
-      const pkgExists = await this.getDB().get(`components.${name}`).value()
+      const pkgExists = await this.getDB().get('components').get(name).value()
       if (!pkgExists) {
         throw new XPSProjectError('no such package with name')
       }
@@ -135,6 +138,7 @@ export default class XPSProject {
         description: pkgOptions.description,
         version: '0.0.0',
         entry: path.relative(this.projectLocation, pkgOptions.entry),
+        from: pkgOptions.from,
       }
 
       // write component into projDB

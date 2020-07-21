@@ -13,7 +13,7 @@ export default class SnapshotStatus extends Command {
   static args = [{name: 'pkgName', required: false}]
 
   async run() {
-    const {args, flags} = this.parse(SnapshotStatus)
+    const {args} = this.parse(SnapshotStatus)
 
     // create new project adapter
     const project = new XPSProject()

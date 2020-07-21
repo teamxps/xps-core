@@ -54,7 +54,7 @@ export default class InitPackage extends Command {
     ])
 
     // attempt to add package to project ref
-    await project.addPkg(response)
+    await project.addPkg(Object.assign(response, {from: 'this'}))
     this.log('successfully created new xps module')
   }
 }

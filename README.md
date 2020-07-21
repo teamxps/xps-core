@@ -36,11 +36,12 @@ USAGE
 # Commands
 <!-- commands -->
 * [`xps help [COMMAND]`](#xps-help-command)
+* [`xps import:import`](#xps-importimport)
 * [`xps init:package`](#xps-initpackage)
 * [`xps init:project [DIRNAME]`](#xps-initproject-dirname)
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
 * [`xps meta:hashobject [HASH]`](#xps-metahashobject-hash)
-* [`xps remote:add NAME PATH`](#xps-remoteadd-name-path)
+* [`xps remote:add NAME PATH TYPE`](#xps-remoteadd-name-path-type)
 * [`xps remote:delete NAME TYPE`](#xps-remotedelete-name-type)
 * [`xps remote:get`](#xps-remoteget)
 * [`xps scope:select`](#xps-scopeselect)
@@ -63,6 +64,24 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
+
+## `xps import:import`
+
+Add a remote to the project
+
+```
+USAGE
+  $ xps import:import
+
+OPTIONS
+  -h, --help         show CLI help
+  -i, --interactive
+
+ALIASES
+  $ xps import
+```
+
+_See code: [src\commands\import\import.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\import\import.ts)_
 
 ## `xps init:package`
 
@@ -137,19 +156,16 @@ ALIASES
 
 _See code: [src\commands\meta\hashobject.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\meta\hashobject.ts)_
 
-## `xps remote:add NAME PATH`
+## `xps remote:add NAME PATH TYPE`
 
-describe the command here
+Add a remote to the project
 
 ```
 USAGE
-  $ xps remote:add NAME PATH
+  $ xps remote:add NAME PATH TYPE
 
 OPTIONS
-  -a, --all
-  -f, --fetch
-  -h, --help   show CLI help
-  -p, --push
+  -h, --help  show CLI help
 ```
 
 _See code: [src\commands\remote\add.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\remote\add.ts)_

@@ -19,6 +19,8 @@ export default class InitProject extends Command {
     const project = new XPSProject()
     // init xps.json and dir
     await project.createNewProject(args.dirname)
+    await project.init()
+    await project.setScope('all', true)
 
     this.log('successfully created a new xps project')
   }

@@ -69,12 +69,15 @@ export default class XPSPackage {
       return {
         fileChanges: currentDependencies.fileDependencies,
         npmChanges: {additions: currentDependencies.npmDependencies},
-        hash: history[0],
+        hash: (history) ? history[0] : null,
       }
     }
 
     // string representation of snapshots from diff obj
     displayChangesObj(obj: any) {
+      if (!obj.hash) {
+        return 'No snapshot history\n'
+      }
       let rep = `Latest snapshot: ${obj.hash}\n`
       // eslint-disable-next-line unicorn/explicit-length-check
       if (!obj.fileChanges.additions.length && !obj.fileChanges.removals.length && !obj.fileChanges.modifications.length && !obj.npmChanges.additions.length && !obj.npmChanges.removals.length) {
@@ -122,6 +125,7 @@ export default class XPSPackage {
     displaySnapshotObj(obj: any) {
       let rep = ''
       rep += `author: ${obj.author}\n`
+      rep += `entry: ${obj.entry}\n`
       rep += `date: ${obj.date}\n`
       rep += `dependencies: ${JSON.stringify(obj.dependencies, null, 2)}`
 
@@ -146,6 +150,7 @@ export default class XPSPackage {
         author: process.env.USER || os.userInfo().username,
         date: Date.now(),
         dependencies: dependencies,
+        entry: this.entryLocation
       }
       // write snapshot to file
       const hash = await createHashedContent(JSON.stringify(snapshot, null, 2), path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR))
