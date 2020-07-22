@@ -150,7 +150,7 @@ export default class XPSPackage {
         author: process.env.USER || os.userInfo().username,
         date: Date.now(),
         dependencies: dependencies,
-        entry: this.entryLocation
+        entry: path.relative(this.projectLocation, this.entryLocation),
       }
       // write snapshot to file
       const hash = await createHashedContent(JSON.stringify(snapshot, null, 2), path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR))

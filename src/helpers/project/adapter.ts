@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import {projectExists} from './validation'
 import {initDatabase} from './setup'
 import * as low from 'lowdb'
@@ -7,7 +8,7 @@ import * as fs from 'fs-extra'
 import * as Constants from './constants'
 import {initJSON} from './setup'
 import XPSPackage from '../package/adapter'
-import {readGzip} from '../general/object'
+import {readGzip, createContent} from '../general/object'
 import {any} from 'bluebird'
 
 interface XPSProjectOpts{
@@ -32,7 +33,7 @@ export default class XPSProject {
 
     // init the adapter
     async init(opts: XPSProjectOpts = {}) {
-      this.projectLocation = (opts.projectDir) ? opts.projectDir : await projectExists()
+      this.projectLocation = (opts.projectDir) ? await projectExists({startDir: opts.projectDir}) : await projectExists()
       if (!this.projectLocation) {
         throw new XPSProjectError('could not find an .xps project in this or any parent folders')
       }
@@ -41,15 +42,76 @@ export default class XPSProject {
       this.isInit = true
     }
 
-    async fetchPackages() {}
+    // move components from another project to this one
+    async transplantComponents(sourceProject: XPSProject, components: Array<string>, remoteName: string) {
+      for (let i = 0; i < components.length; i++) {
+        const sourceComponent = await sourceProject.getDB().get(`components.${components[i]}`).value()
+
+        console.log(`IMPORTING ${sourceComponent.name}`)
+
+        // create component
+        const component = await this.addPkg({
+          name: sourceComponent.name,
+          description: sourceComponent.description,
+          entry: sourceComponent.entry,
+          from: remoteName,
+        })
+
+        // import history
+        for (let h = 0; h < sourceComponent.history.length; h++) {
+          // copy over
+          await fs.copy(path.join(sourceProject.projectLocation,
+            Constants.XPS_OBJECTS_DIR, sourceComponent.history[h]),
+          path.join(this.projectLocation,
+            Constants.XPS_OBJECTS_DIR, sourceComponent.history[h]))
+
+          // apply snapshot change
+          const snap = await this.getObj(path.join(this.projectLocation,
+            Constants.XPS_OBJECTS_DIR, sourceComponent.history[0])).then(s => JSON.parse(s))
+
+          console.log(snap)
+
+          // copy entry
+          // await fs.copy(path.join(sourceProject.projectLocation, snap.entry), path.join(this.projectLocation, snap.entry))
+
+          // copy over filedependencies
+          const fileKeys = Object.keys(snap.dependencies.fileDependencies)
+          for (let f = 0; f < fileKeys.length; f++) {
+            // copy over hashed object
+            fs.copy(path.join(sourceProject.projectLocation,
+              Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]),
+            path.join(this.projectLocation,
+              Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
+
+            // last snapshot
+            if (h === sourceComponent.history.length - 1) {
+              const hashedContent = await readGzip(path.join(this.projectLocation,
+                Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
+
+              await fs.writeFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]), hashedContent)
+              console.log(`WRITING ${fileKeys[f]} at ${path.join(path.dirname(snap.entry), fileKeys[f])}`)
+            }
+          }
+
+          // write to history
+          const val = await this.getDB().get(`components.${sourceComponent.name}.history`).value()
+          if (!val)
+            await this.getDB().set(`components.${sourceComponent.name}.history`, []).write()
+          await this.getDB().get(`components.${components[i]}.history`).push(sourceComponent.history[h]).write()
+        }
+      }
+    }
 
     // set project remotes
     async setRemotes(remoteName: string, remotePath: string, remoteType: 'fetch' | 'push') {
       await this.getDB().set(`remotes.${remoteName}.${remoteType}`, remotePath).write()
     }
 
-    // get all project remotes
-    async getRemotes() {
+    async getRemote(remoteName: string) {
+      return this.getDB().get(`remotes.${remoteName}`).value()
+    }
+
+    getRemotes() {
       return this.getDB().get('remotes').value()
     }
 
@@ -138,7 +200,7 @@ export default class XPSProject {
         description: pkgOptions.description,
         version: '0.0.0',
         entry: path.relative(this.projectLocation, pkgOptions.entry),
-        from: pkgOptions.from,
+        from: pkgOptions.from || 'this',
       }
 
       // write component into projDB

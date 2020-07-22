@@ -12,32 +12,41 @@ export default class Import extends Command {
     interactive: flags.boolean({char: 'i', default: true}),
   }
 
-  // static args = []
+   static args = [{
+     name: 'remoteName',
+     default: 'origin',
+   }]
 
-  async run() {
-    const {args, flags} = this.parse(Import)
+   async run() {
+     const {args, flags} = this.parse(Import)
 
-    // create new project adapter
-    const project = new XPSProject()
+     // create new project adapter
+     const project = new XPSProject()
 
-    // get reference
-    await project.init()
+     // get reference
+     await project.init()
 
-    // interactive select
-    if (flags.interactive) {
-      // get remotes with fetch
-      const remotes = await project.getRemotes()
-      const keys = Object.keys(remotes)
+     // interactive select
+     if (flags.interactive) {
+       // get remotes with fetch
+       const remote = await project.getRemote(args.remoteName)
 
-      for (let i = 0; i < keys.length; i++) {
-        if (remotes[keys[i]].fetch) {
-          const remoteProj = new XPSProject()
-          // eslint-disable-next-line no-await-in-loop
-          await remoteProj.init(remotes[keys[i]].fetch)
-        }
-      }
+       const remoteProj = new XPSProject()
+       await remoteProj.init({projectDir: remote.fetch})
 
-      console.log(remotes)
-    }
-  }
+       this.log('FOUND REMOTE! FETCHING>>>>')
+
+       // get components
+       const choices = await remoteProj.getComponentNames()
+       if (choices) {
+         const prompt = new MultiSelect({
+           name: 'value',
+           message: 'Select components to import\nPress space to toggle components, Press enter to submit',
+           choices: choices.map(c => ({name: c, value: c})),
+         })
+         const imported = await prompt.run()
+         await project.transplantComponents(remoteProj, imported, args.remoteName)
+       }
+     }
+   }
 }

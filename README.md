@@ -36,7 +36,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`xps help [COMMAND]`](#xps-help-command)
-* [`xps import:import`](#xps-importimport)
+* [`xps import:import [REMOTENAME]`](#xps-importimport-remotename)
 * [`xps init:package`](#xps-initpackage)
 * [`xps init:project [DIRNAME]`](#xps-initproject-dirname)
 * [`xps meta:dependency FILE`](#xps-metadependency-file)
@@ -65,13 +65,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src\commands\help.ts)_
 
-## `xps import:import`
+## `xps import:import [REMOTENAME]`
 
 Add a remote to the project
 
 ```
 USAGE
-  $ xps import:import
+  $ xps import:import [REMOTENAME]
 
 OPTIONS
   -h, --help         show CLI help

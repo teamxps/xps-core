@@ -14,7 +14,7 @@ export default class ScopeSelect extends Command {
     help: flags.help({char: 'h'}),
     interactive: flags.boolean({
       char: 'i',
-      default: false,
+      default: true,
     }),
     all: flags.boolean({
       char: 'a',
