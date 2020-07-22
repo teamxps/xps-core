@@ -49,11 +49,14 @@ export default class XPSProject {
 
         console.log(`IMPORTING ${sourceComponent.name}`)
 
+        // hardcoded rn fix later
+        let entry = sourceComponent.entry
+        entry = entry.substring(entry.indexOf('\\') + 1, entry.length)
         // create component
         const component = await this.addPkg({
           name: sourceComponent.name,
           description: sourceComponent.description,
-          entry: sourceComponent.entry,
+          entry: entry,
           from: remoteName,
         })
 
@@ -68,8 +71,6 @@ export default class XPSProject {
           // apply snapshot change
           const snap = await this.getObj(path.join(this.projectLocation,
             Constants.XPS_OBJECTS_DIR, sourceComponent.history[0])).then(s => JSON.parse(s))
-
-          console.log(snap)
 
           // copy entry
           // await fs.copy(path.join(sourceProject.projectLocation, snap.entry), path.join(this.projectLocation, snap.entry))
@@ -194,6 +195,8 @@ export default class XPSProject {
       if (!entryExists) {
         await fs.ensureFile(pkgOptions.entry)
       }
+
+      console.log(path.relative(this.projectLocation, pkgOptions.entry))
 
       const obj =  {
         name: pkgOptions.name,

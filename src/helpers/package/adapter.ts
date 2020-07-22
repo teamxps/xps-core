@@ -46,7 +46,6 @@ export default class XPSPackage {
       const currentDependencies = await getDependencies(this.entryLocation)
       if (history) { // check if there was even a previous snapshot
         const recentDependencies = await this.getObj(history[0]).then(str => JSON.parse(str).dependencies)
-
         // compare npm dependencies
         const npmDiffs = {
           additions: _.difference(currentDependencies.npmDependencies, recentDependencies.npmDependencies),
