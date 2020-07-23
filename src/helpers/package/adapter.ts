@@ -39,6 +39,40 @@ export default class XPSPackage {
       return readGzip(path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR, hash))
     }
 
+    // compare diffs between 2 packages
+    async compareChanges(otherXPSPackage: XPSPackage) {
+      const db = await otherXPSPackage.xpsDBRef.get(`components.${this.name}`)
+      const history = await db.get('history').value()
+      const currentDependencies = await getDependencies(this.entryLocation)
+      if (history) { // check if there was even a previous snapshot
+        const recentDependencies = await otherXPSPackage.getObj(history[0]).then(str => JSON.parse(str).dependencies)
+        // console.log(recentDependencies)
+        // console.log(currentDependencies)
+        // compare npm dependencies
+        const npmDiffs = {
+          additions: _.difference(currentDependencies.npmDependencies, recentDependencies.npmDependencies),
+          removals: _.difference(recentDependencies.npmDependencies, currentDependencies.npmDependencies),
+        }
+        // compare file diffs
+        const fileDiffs = {
+          additions: _.difference(Object.keys(currentDependencies.fileDependencies), Object.keys(recentDependencies.fileDependencies)),
+          removals: _.difference(Object.keys(recentDependencies.fileDependencies), Object.keys(currentDependencies.fileDependencies)),
+          modifications: _.intersection(Object.keys(currentDependencies.fileDependencies), Object.keys(recentDependencies.fileDependencies))
+          .filter(k => {
+            // console.log(`${currentDependencies.fileDependencies[k]}\n${recentDependencies.fileDependencies[k]}`)
+            return currentDependencies.fileDependencies[k] !== recentDependencies.fileDependencies[k]
+          }
+          ),
+        }
+        return {fileChanges: fileDiffs, npmChanges: npmDiffs, hash: history[0]}
+      }
+      return {
+        fileChanges: currentDependencies.fileDependencies,
+        npmChanges: {additions: currentDependencies.npmDependencies, removals: [] as string[]},
+        hash: (history) ? history[0] : null,
+      }
+    }
+
     // show changes from last snapshot
     async genChanges() {
       const db = await this.xpsDBRef.get(`components.${this.name}`)

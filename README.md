@@ -35,6 +35,7 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`xps fetch:fetch [REMOTENAME]`](#xps-fetchfetch-remotename)
 * [`xps help [COMMAND]`](#xps-help-command)
 * [`xps import:import [REMOTENAME]`](#xps-importimport-remotename)
 * [`xps init:package`](#xps-initpackage)
@@ -47,6 +48,24 @@ USAGE
 * [`xps scope:select`](#xps-scopeselect)
 * [`xps snapshot:all [PKGNAME]`](#xps-snapshotall-pkgname)
 * [`xps snapshot:status [PKGNAME]`](#xps-snapshotstatus-pkgname)
+
+## `xps fetch:fetch [REMOTENAME]`
+
+describe the command here
+
+```
+USAGE
+  $ xps fetch:fetch [REMOTENAME]
+
+OPTIONS
+  -h, --help         show CLI help
+  -i, --interactive
+
+ALIASES
+  $ xps fetch
+```
+
+_See code: [src\commands\fetch\fetch.ts](https://github.com/teamxps/xps/blob/v0.0.0/src\commands\fetch\fetch.ts)_
 
 ## `xps help [COMMAND]`
 
