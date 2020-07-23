@@ -67,7 +67,7 @@ export default class XPSPackage {
         return {fileChanges: fileDiffs, npmChanges: npmDiffs, hash: history[0]}
       }
       return {
-        fileChanges: currentDependencies.fileDependencies,
+        fileChanges: {additions: currentDependencies.fileDependencies, removals: [] as string[], modifications: [] as string[]},
         npmChanges: {additions: currentDependencies.npmDependencies, removals: [] as string[]},
         hash: (history) ? history[0] : null,
       }
@@ -100,7 +100,7 @@ export default class XPSPackage {
         return {fileChanges: fileDiffs, npmChanges: npmDiffs, hash: history[0]}
       }
       return {
-        fileChanges: currentDependencies.fileDependencies,
+        fileChanges: {additions: currentDependencies.fileDependencies, removals: [] as string[], modifications: [] as string[]},
         npmChanges: {additions: currentDependencies.npmDependencies},
         hash: (history) ? history[0] : null,
       }

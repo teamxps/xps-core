@@ -51,6 +51,8 @@ export default class Fetch extends Command {
           diffs.npmChanges.additions.length > 0 || (diffs.npmChanges as any).removals.length > 0) {
            this.log(`NEW CHANGES FROM ${args.remoteName}`)
            this.log(localRef.displayChangesObj(diffs) + '\n')
+         } else {
+           this.log('NO CHANGES \n')
          }
        }
      }
