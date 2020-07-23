@@ -26,8 +26,14 @@ export default class SnapshotAll extends Command {
       const pkg = await project.getPkgRef(args.pkgName)
 
       // create full snapshot
-      const snapshot = await pkg.createFullSnapshot()
-      return this.log(pkg.displaySnapshotObj(snapshot))
+      const diffs = await pkg.genChanges()
+      if (diffs.fileChanges.additions.length > 0 || diffs.fileChanges.removals.length > 0 || diffs.fileChanges.modifications.length > 0 ||
+        diffs.npmChanges.additions.length > 0 || diffs.npmChanges.removals.length > 0) {
+        this.log(`Diffs in Component ID: ${args.pkgName}, generating snapshot`)
+        const snapshot = await pkg.createFullSnapshot()
+        return this.log(pkg.displaySnapshotObj(snapshot))
+      }
+      return this.log(`No diffs in Component ID: ${args.pkgName}`)
     }
 
     // get pkgRef for each component in scope
@@ -38,9 +44,15 @@ export default class SnapshotAll extends Command {
 
       // show file diffs
       // eslint-disable-next-line no-await-in-loop
-      const snapshot = await pkg.createFullSnapshot()
-      this.log(`Component ID: ${scope[i]}`)
-      this.log(pkg.displaySnapshotObj(snapshot))
+      const diffs = await pkg.genChanges()
+      if (diffs.fileChanges.additions.length > 0 || diffs.fileChanges.removals.length > 0 || diffs.fileChanges.modifications.length > 0 ||
+        diffs.npmChanges.additions.length > 0 || diffs.npmChanges.removals.length > 0) {
+        this.log(`Diffs in Component ID: ${scope[i]}, generating snapshot`)
+        const snapshot = await pkg.createFullSnapshot()
+        this.log(pkg.displaySnapshotObj(snapshot))
+      } else {
+        this.log(`No diffs in Component ID: ${scope[i]}`)
+      }
     }
   }
 }
