@@ -60,6 +60,8 @@ export default class XPSProject {
           from: remoteName,
         })
 
+        let fileKeys; let snap
+
         // import history
         for (let h = 0; h < sourceComponent.history.length; h++) {
           // copy over
@@ -69,29 +71,20 @@ export default class XPSProject {
             Constants.XPS_OBJECTS_DIR, sourceComponent.history[h]))
 
           // apply snapshot change
-          const snap = await this.getObj(path.join(this.projectLocation,
-            Constants.XPS_OBJECTS_DIR, sourceComponent.history[0])).then(s => JSON.parse(s))
+          snap = await this.getObj(path.join(this.projectLocation,
+            Constants.XPS_OBJECTS_DIR, sourceComponent.history[h])).then(s => JSON.parse(s))
 
           // copy entry
           // await fs.copy(path.join(sourceProject.projectLocation, snap.entry), path.join(this.projectLocation, snap.entry))
 
           // copy over filedependencies
-          const fileKeys = Object.keys(snap.dependencies.fileDependencies)
+          fileKeys = Object.keys(snap.dependencies.fileDependencies)
           for (let f = 0; f < fileKeys.length; f++) {
             // copy over hashed object
             fs.copy(path.join(sourceProject.projectLocation,
               Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]),
             path.join(this.projectLocation,
               Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
-
-            // last snapshot
-            if (h === sourceComponent.history.length - 1) {
-              const hashedContent = await readGzip(path.join(this.projectLocation,
-                Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
-
-              await fs.writeFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]), hashedContent)
-              console.log(`WRITING ${fileKeys[f]} at ${path.join(path.dirname(snap.entry), fileKeys[f])}`)
-            }
           }
 
           // write to history
@@ -99,6 +92,17 @@ export default class XPSProject {
           if (!val)
             await this.getDB().set(`components.${sourceComponent.name}.history`, []).write()
           await this.getDB().get(`components.${components[i]}.history`).push(sourceComponent.history[h]).write()
+        }
+
+        // write last snapshot
+        console.log('WRITING TO LATEST SNAPSHOT NOW!')
+        for (let f = 0; f < fileKeys.length; f++) {
+          const hashedContent = await readGzip(path.join(this.projectLocation,
+            Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
+
+          await fs.ensureFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]))
+          await fs.writeFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]), hashedContent)
+          console.log(`WRITING ${fileKeys[f]} at ${path.join(path.dirname(snap.entry), fileKeys[f])}`)
         }
       }
     }
@@ -160,7 +164,7 @@ export default class XPSProject {
 
     // get a ref to a pkg object given string
     async getPkgRef(name: string) {
-      // check if pkg with name exists
+    // check if pkg with name exists
       const pkgExists = await this.getDB().get('components').get(name).value()
       if (!pkgExists) {
         throw new XPSProjectError('no such package with name')
