@@ -48,6 +48,7 @@ export default class SnapshotAll extends Command {
       if (diffs.fileChanges.additions.length > 0 || diffs.fileChanges.removals.length > 0 || diffs.fileChanges.modifications.length > 0 ||
         diffs.npmChanges.additions.length > 0 || diffs.npmChanges.removals.length > 0) {
         this.log(`Diffs in Component ID: ${scope[i]}, generating snapshot`)
+        // eslint-disable-next-line no-await-in-loop
         const snapshot = await pkg.createFullSnapshot()
         this.log(pkg.displaySnapshotObj(snapshot))
       } else {

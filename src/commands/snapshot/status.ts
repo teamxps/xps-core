@@ -32,6 +32,7 @@ export default class SnapshotStatus extends Command {
 
     // get pkgRef for each component in scope
     const scope = await project.getScope()
+    scope.sort()
     for (let i = 0; i < scope.length; i++) {
       // eslint-disable-next-line no-await-in-loop
       const pkg = await project.getPkgRef(scope[i])
