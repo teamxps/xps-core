@@ -176,6 +176,7 @@ export default class XPSPackage {
         // eslint-disable-next-line no-await-in-loop
         const content = await fs.readFile(path.resolve(this.entryLocation, '../', fileDependencies[i])).then(b => b.toString())
         // eslint-disable-next-line no-await-in-loop
+        await fs.ensureDir(path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR))
         await createHashedContent(content, path.resolve(this.packageLocation, Constants.XPS_OBJECTS_DIR))
       }
 

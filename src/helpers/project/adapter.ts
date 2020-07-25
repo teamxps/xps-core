@@ -52,6 +52,7 @@ export default class XPSProject {
         // hardcoded rn fix later
         let entry = sourceComponent.entry
         entry = entry.substring(entry.indexOf('\\') + 1, entry.length)
+        console.log(entry)
         // create component
         const component = await this.addPkg({
           name: sourceComponent.name,
@@ -81,7 +82,7 @@ export default class XPSProject {
           fileKeys = Object.keys(snap.dependencies.fileDependencies)
           for (let f = 0; f < fileKeys.length; f++) {
             // copy over hashed object
-            fs.copy(path.join(sourceProject.projectLocation,
+            await fs.copy(path.join(sourceProject.projectLocation,
               Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]),
             path.join(this.projectLocation,
               Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
@@ -96,13 +97,16 @@ export default class XPSProject {
 
         // write last snapshot
         console.log('WRITING TO LATEST SNAPSHOT NOW!')
+        snap = await this.getObj(path.join(this.projectLocation,
+          Constants.XPS_OBJECTS_DIR, sourceComponent.history[0])).then(s => JSON.parse(s))
+        console.log(snap)
         for (let f = 0; f < fileKeys.length; f++) {
           const hashedContent = await readGzip(path.join(this.projectLocation,
             Constants.XPS_OBJECTS_DIR, snap.dependencies.fileDependencies[fileKeys[f]]))
 
           await fs.ensureFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]))
-          await fs.writeFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]), hashedContent)
-          console.log(`WRITING ${fileKeys[f]} at ${path.join(path.dirname(snap.entry), fileKeys[f])}`)
+          await fs.writeFile(path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f]), hashedContent, {flag: 'w+'})
+          console.log(`WRITING ${fileKeys[f]} at ${path.join(this.projectLocation, path.dirname(snap.entry), fileKeys[f])}`)
         }
       }
     }
@@ -197,16 +201,14 @@ export default class XPSProject {
       const entryExists = await fs.pathExists(pkgOptions.entry)
       // if not create it
       if (!entryExists) {
-        await fs.ensureFile(pkgOptions.entry)
+        await fs.ensureFile(path.resolve(pkgOptions.entry))
       }
-
-      console.log(path.relative(this.projectLocation, pkgOptions.entry))
 
       const obj =  {
         name: pkgOptions.name,
         description: pkgOptions.description,
         version: '0.0.0',
-        entry: path.relative(this.projectLocation, pkgOptions.entry),
+        entry: path.relative(this.projectLocation, path.resolve(pkgOptions.entry)),
         from: pkgOptions.from || 'this',
       }
 
